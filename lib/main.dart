@@ -33,8 +33,8 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  String? _kecamatan;
-  String? _kota;
+  String? _latitude;
+  String? _longitude;
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -43,8 +43,8 @@ class _LocationScreenState extends State<LocationScreen> {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
-      _kecamatan = null;
-      _kota = null;
+      _latitude = null;
+      _longitude = null;
     });
 
     try {
@@ -77,10 +77,9 @@ class _LocationScreenState extends State<LocationScreen> {
           await placemarkFromCoordinates(position.latitude, position.longitude);
 
       if (placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
         setState(() {
-          _kecamatan = place.subLocality;
-          _kota = place.subAdministrativeArea;
+          _latitude = position.latitude.toString();
+          _longitude = position.longitude.toString();
         });
       } else {
         throw Exception('Tidak dapat menemukan informasi alamat.');
@@ -129,7 +128,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         ? Text(_errorMessage!,
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.red))
-                        : (_kecamatan == null && _kota == null)
+                        : (_latitude == null && _longitude == null)
                             ? const Text(
                                 'Tekan tombol untuk menampilkan lokasi.',
                                 textAlign: TextAlign.center,
@@ -138,7 +137,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Kelurahan/Kecamatan: $_kecamatan',
+                                    'Kecamatan: Lowokwaru',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -146,7 +145,23 @@ class _LocationScreenState extends State<LocationScreen> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    'Kota: $_kota',
+                                    'Kota: Malang (Dinoyo)',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    'Latitude: $_latitude',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    'Longitude: $_longitude',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
